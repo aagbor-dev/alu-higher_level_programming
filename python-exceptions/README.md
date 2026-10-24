@@ -8,3 +8,4 @@ Python scripts that practice handling exceptions with try/except.
 - `3-safe_print_division.py`: function that divides two integers and prints the result in `finally`
 - `4-list_division.py`: function that divides two lists element by element
 - `5-raise_exception.py`: function that raises a TypeError
+- `6-raise_exception_msg.py`: function that raises a NameError with a message
