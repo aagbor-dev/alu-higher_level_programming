@@ -9,3 +9,6 @@ Python scripts that practice classes, properties and special methods.
 - `4-rectangle.py`: Rectangle class with a repr that works with eval
 - `5-rectangle.py`: Rectangle class that prints a message when deleted
 - `6-rectangle.py`: Rectangle class that counts its instances
+- `7-rectangle.py`: Rectangle class with a changeable print symbol
+- `8-rectangle.py`: Rectangle class with a static method to compare areas
+- `9-rectangle.py`: Rectangle class with a class method that builds a square
