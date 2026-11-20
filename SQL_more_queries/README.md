@@ -15,3 +15,7 @@ SQL scripts that practice users, privileges, constraints and foreign keys on a M
 - `10-genre_id_by_show.sql`: script that lists the shows that have at least one genre
 - `11-genre_id_all_shows.sql`: script that lists all shows, with NULL when there is no genre
 - `12-no_genre.sql`: script that lists the shows without a genre
+- `13-count_shows_by_genre.sql`: script that lists the genres with the number of shows linked to each
+- `14-my_genres.sql`: script that lists the genres of the show Dexter
+- `15-comedy_only.sql`: script that lists all Comedy shows
+- `16-shows_by_genre.sql`: script that lists all shows with their genres, NULL if none
