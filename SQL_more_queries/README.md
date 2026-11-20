@@ -10,3 +10,8 @@ SQL scripts that practice users, privileges, constraints and foreign keys on a M
 - `5-unique_id.sql`: script that creates the table unique_id with a unique id
 - `6-states.sql`: script that creates the database hbtn_0d_usa and the table states
 - `7-cities.sql`: script that creates the table cities with a foreign key to states
+- `8-cities_of_california_subquery.sql`: script that lists the cities of California with a subquery
+- `9-cities_by_state_join.sql`: script that lists all cities with the name of their state
+- `10-genre_id_by_show.sql`: script that lists the shows that have at least one genre
+- `11-genre_id_all_shows.sql`: script that lists all shows, with NULL when there is no genre
+- `12-no_genre.sql`: script that lists the shows without a genre
