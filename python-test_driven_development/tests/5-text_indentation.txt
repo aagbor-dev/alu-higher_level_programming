@@ -1,0 +1,58 @@
+Tests for the text_indentation function in 5-text_indentation.py
+================================================================
+
+    >>> text_indentation = __import__('5-text_indentation').text_indentation
+
+A gap after a period:
+
+    >>> text_indentation("Hello. World.")
+    Hello.
+    <BLANKLINE>
+    World.
+    <BLANKLINE>
+
+A gap after a question mark and a colon:
+
+    >>> text_indentation("What? Yes: no")
+    What?
+    <BLANKLINE>
+    Yes:
+    <BLANKLINE>
+    no
+
+Commas do not make a gap:
+
+    >>> text_indentation("one, two")
+    one, two
+
+No space at the beginning or the end of a line:
+
+    >>> text_indentation("   spaces .   more   ")
+    spaces .
+    <BLANKLINE>
+    more
+
+A text without a special character:
+
+    >>> text_indentation("Hello")
+    Hello
+
+An empty text prints nothing:
+
+    >>> text_indentation("")
+
+Text that is not a string is a TypeError:
+
+    >>> text_indentation(12)
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+    >>> text_indentation(None)
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+The text is required:
+
+    >>> text_indentation()  # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    TypeError: ...text_indentation() missing 1 required positional argument: 'text'
