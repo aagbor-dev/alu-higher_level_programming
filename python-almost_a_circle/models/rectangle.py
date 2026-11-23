@@ -88,3 +88,35 @@ class Rectangle(Base):
     def area(self):
         """Return the area of the rectangle."""
         return self.__width * self.__height
+
+    def display(self):
+        """Print the rectangle with the character #.
+
+        The y attribute gives the number of empty lines before the
+        rectangle, and the x attribute gives the number of spaces
+        before each row.
+        """
+        print("\n" * self.__y, end="")
+        for _ in range(self.__height):
+            print(" " * self.__x + "#" * self.__width)
+
+    def __str__(self):
+        """Return [Rectangle] (<id>) <x>/<y> - <width>/<height>."""
+        return "[Rectangle] ({}) {}/{} - {}/{}".format(
+            self.id, self.__x, self.__y, self.__width, self.__height)
+
+    def update(self, *args, **kwargs):
+        """Assign values to the attributes of the rectangle.
+
+        Args:
+            *args: the new values, in the order id, width, height, x, y.
+            **kwargs: the new values by name. Ignored if args is not empty.
+        """
+        names = ("id", "width", "height", "x", "y")
+        if args:
+            for name, value in zip(names, args):
+                setattr(self, name, value)
+        else:
+            for name, value in kwargs.items():
+                if name in names:
+                    setattr(self, name, value)
