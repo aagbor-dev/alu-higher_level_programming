@@ -11,3 +11,6 @@ A small project that builds classes for geometric shapes with Python.
 - `to_dictionary()` on Rectangle and Square returns a dictionary of the attributes
 - `Base.to_json_string()` turns a list of dictionaries into a JSON string
 - `Base.save_to_file()` writes a list of instances to `<Class name>.json`
+- `Base.from_json_string()` turns a JSON string back into a list
+- `Base.create()` builds an instance from a dictionary
+- `Base.load_from_file()` reads the instances saved in `<Class name>.json`

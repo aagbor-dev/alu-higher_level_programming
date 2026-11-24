@@ -55,3 +55,53 @@ class Base:
         dictionaries = [obj.to_dictionary() for obj in list_objs]
         with open(cls.__name__ + ".json", "w", encoding="utf-8") as file:
             file.write(cls.to_json_string(dictionaries))
+
+    @staticmethod
+    def from_json_string(json_string):
+        """Return the list that a JSON string represents.
+
+        Args:
+            json_string (str): a JSON string of a list of dictionaries,
+                or None.
+
+        Returns:
+            An empty list if json_string is None or empty, otherwise the
+            list that the string represents.
+        """
+        if json_string is None or len(json_string) == 0:
+            return []
+        return json.loads(json_string)
+
+    @classmethod
+    def create(cls, **dictionary):
+        """Return an instance of cls with all its attributes set.
+
+        A dummy instance is made with the mandatory attributes, and then
+        the update method applies the real values.
+
+        Args:
+            **dictionary: the attributes of the instance, by name.
+        """
+        if hasattr(cls, "size"):
+            dummy = cls(1)
+        elif hasattr(cls, "width"):
+            dummy = cls(1, 1)
+        else:
+            dummy = cls()
+        dummy.update(**dictionary)
+        return dummy
+
+    @classmethod
+    def load_from_file(cls):
+        """Return the list of instances saved in <class name>.json.
+
+        Returns:
+            An empty list if the file does not exist, otherwise a list of
+            instances of cls.
+        """
+        try:
+            with open(cls.__name__ + ".json", "r", encoding="utf-8") as file:
+                content = file.read()
+        except FileNotFoundError:
+            return []
+        return [cls.create(**item) for item in cls.from_json_string(content)]
