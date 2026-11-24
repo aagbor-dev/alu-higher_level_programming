@@ -75,7 +75,7 @@ class TestRectangleDisplay(unittest.TestCase):
     def test_display_does_not_change_attributes(self):
         """The display keeps x and y as they are."""
         r = Rectangle(2, 2)
-        r.display()
+        printed(r.display)
         self.assertEqual((r.x, r.y), (0, 0))
 
     def test_display_returns_none(self):
