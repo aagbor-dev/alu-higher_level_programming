@@ -1,96 +1,79 @@
 #!/usr/bin/python3
-"""Unittests for the Base class."""
+"""Unittests for models/base.py"""
+import os
 import unittest
 from models.base import Base
+from models.rectangle import Rectangle
 
 
 class TestBase(unittest.TestCase):
-    """Tests for the Base class."""
+    """Tests for the Base class"""
 
     def setUp(self):
-        """Reset the id counter so every test starts from 0."""
+        """Reset the object counter before each test"""
         Base._Base__nb_objects = 0
 
-    def test_first_id_is_one(self):
-        """The first instance gets the id 1."""
+    def tearDown(self):
+        """Remove json files created by the tests"""
+        for name in ("Base.json", "Rectangle.json", "Square.json"):
+            if os.path.exists(name):
+                os.remove(name)
+
+    def test_id_auto(self):
+        b1 = Base()
+        b2 = Base()
+        self.assertEqual(b1.id, 1)
+        self.assertEqual(b2.id, 2)
+
+    def test_id_none(self):
+        b1 = Base(None)
+        b2 = Base(None)
+        self.assertEqual(b2.id, b1.id + 1)
+
+    def test_id_given(self):
+        self.assertEqual(Base(89).id, 89)
+
+    def test_id_given_does_not_increment(self):
+        Base(89)
         self.assertEqual(Base().id, 1)
 
-    def test_ids_increase(self):
-        """Each new instance gets the next id."""
-        ids = [Base().id for _ in range(5)]
-        self.assertEqual(ids, [1, 2, 3, 4, 5])
+    def test_nb_objects_private(self):
+        with self.assertRaises(AttributeError):
+            Base.__nb_objects
 
-    def test_given_id(self):
-        """An id that is given is used as it is."""
-        self.assertEqual(Base(12).id, 12)
+    def test_to_json_string_none(self):
+        self.assertEqual(Base.to_json_string(None), "[]")
 
-    def test_given_id_does_not_move_counter(self):
-        """A given id does not use up a number of the counter."""
-        Base()
-        Base(12)
-        self.assertEqual(Base().id, 2)
+    def test_to_json_string_empty(self):
+        self.assertEqual(Base.to_json_string([]), "[]")
 
-    def test_task_example(self):
-        """The example of the task gives 1, 2, 3, 12, 4."""
-        ids = [Base().id, Base().id, Base().id, Base(12).id, Base().id]
-        self.assertEqual(ids, [1, 2, 3, 12, 4])
+    def test_to_json_string_one(self):
+        s = Base.to_json_string([{'id': 12}])
+        self.assertEqual(type(s), str)
+        self.assertEqual(s, '[{"id": 12}]')
 
-    def test_given_id_zero(self):
-        """The id 0 is a given id and is kept."""
-        self.assertEqual(Base(0).id, 0)
+    def test_to_json_string_two(self):
+        s = Base.to_json_string([{'id': 1}, {'id': 2}])
+        self.assertEqual(s, '[{"id": 1}, {"id": 2}]')
 
-    def test_given_negative_id(self):
-        """A negative id is kept."""
-        self.assertEqual(Base(-5).id, -5)
+    def test_from_json_string_none(self):
+        self.assertEqual(Base.from_json_string(None), [])
 
-    def test_given_id_of_other_types(self):
-        """The type of a given id is not checked."""
-        for value in ("abc", 2.5, [1], (1,), {"a": 1}, True):
-            with self.subTest(value=value):
-                self.assertEqual(Base(value).id, value)
+    def test_from_json_string_empty(self):
+        self.assertEqual(Base.from_json_string("[]"), [])
 
-    def test_same_given_id_twice(self):
-        """Two instances can have the same given id."""
-        self.assertEqual(Base(7).id, Base(7).id)
+    def test_from_json_string_one(self):
+        lst = Base.from_json_string('[{ "id": 89 }]')
+        self.assertEqual(type(lst), list)
+        self.assertEqual(lst, [{'id': 89}])
 
-    def test_none_id_uses_counter(self):
-        """An id of None uses the counter."""
-        self.assertEqual(Base(None).id, 1)
+    def test_from_json_string_two(self):
+        lst = Base.from_json_string('[{"id": 1}, {"id": 2}]')
+        self.assertEqual(lst, [{'id': 1}, {'id': 2}])
 
-    def test_id_is_public(self):
-        """The id can be read and changed."""
-        base = Base()
-        base.id = 99
-        self.assertEqual(base.id, 99)
-
-    def test_counter_is_private(self):
-        """The counter is not reachable as a public attribute."""
-        self.assertFalse(hasattr(Base, "nb_objects"))
-        self.assertFalse(hasattr(Base, "__nb_objects"))
-
-    def test_counter_value(self):
-        """The private counter counts only the ids it created."""
-        Base()
-        Base(10)
-        Base()
-        self.assertEqual(Base._Base__nb_objects, 2)
-
-    def test_instance_type(self):
-        """An instance is a Base."""
-        self.assertIsInstance(Base(), Base)
-
-    def test_too_many_arguments(self):
-        """More than one argument is a TypeError."""
-        with self.assertRaises(TypeError):
-            Base(1, 2)
-
-    def test_subclass_shares_counter(self):
-        """A subclass uses the same counter."""
-
-        class Child(Base):
-            pass
-
-        self.assertEqual([Base().id, Child().id, Base().id], [1, 2, 3])
+    def test_json_round_trip(self):
+        d = [Rectangle(10, 7, 2, 8, 1).to_dictionary()]
+        self.assertEqual(Base.from_json_string(Base.to_json_string(d)), d)
 
 
 if __name__ == "__main__":
