@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Defines the Base class, the base of all the other classes."""
+import csv
 import json
 
 
@@ -105,3 +106,34 @@ class Base:
         except FileNotFoundError:
             return []
         return [cls.create(**item) for item in cls.from_json_string(content)]
+
+    @classmethod
+    def save_to_file_csv(cls, list_objs):
+        """Writes the CSV serialization of list_objs to <Class name>.csv"""
+        with open(cls.__name__ + ".csv", "w", newline="") as f:
+            if list_objs is None or list_objs == []:
+                f.write("[]")
+                return
+            if cls.__name__ == "Rectangle":
+                fields = ["id", "width", "height", "x", "y"]
+            else:
+                fields = ["id", "size", "x", "y"]
+            writer = csv.DictWriter(f, fieldnames=fields)
+            for obj in list_objs:
+                writer.writerow(obj.to_dictionary())
+
+    @classmethod
+    def load_from_file_csv(cls):
+        """Returns a list of instances from <Class name>.csv"""
+        if cls.__name__ == "Rectangle":
+            fields = ["id", "width", "height", "x", "y"]
+        else:
+            fields = ["id", "size", "x", "y"]
+        try:
+            with open(cls.__name__ + ".csv", "r", newline="") as f:
+                rows = [row for row in csv.DictReader(f, fieldnames=fields)
+                        if row["id"] != "[]"]
+        except FileNotFoundError:
+            return []
+        return [cls.create(**{k: int(v) for k, v in row.items()})
+                for row in rows]
